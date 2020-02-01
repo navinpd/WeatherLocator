@@ -6,5 +6,5 @@ import com.google.gson.annotations.SerializedName
 data class Country (
 
 	@Expose
-	@SerializedName("__cdata") val __cdata : String
+	@SerializedName("value") val value : String
 )

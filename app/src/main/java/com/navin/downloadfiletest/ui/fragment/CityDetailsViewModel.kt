@@ -15,6 +15,10 @@ class CityDetailsViewModel @Inject constructor(
     private val compositeDisposable: CompositeDisposable,
     private val networkService: NetworkService) {
 
+    companion object {
+        val TAG : String = "CityDetailsViewModel"
+    }
+
     val getCityDetailsLiveData: MutableLiveData<Data> = MutableLiveData()
 
     fun queryCityDetails(query: String) {
@@ -26,7 +30,7 @@ class CityDetailsViewModel @Inject constructor(
                         getCityDetailsLiveData.postValue(it.data)
                     },
                     {
-                        Log.d(MainActivity.TAG, it.toString())
+                        Log.d(TAG, it.toString())
                     }
                 )
         )

@@ -8,14 +8,14 @@ import com.google.gson.annotations.SerializedName
 data class Result(
 
     @Expose
-    @SerializedName("areaName") val areaName: AreaName,
+    @SerializedName("areaName") val areaName: List<AreaName>,
 
 
     @Expose
-    @SerializedName("country") val country: Country,
+    @SerializedName("country") val country: List<Country>,
 
     @Expose
-    @SerializedName("region") val region: Region,
+    @SerializedName("region") val region: List<Region>,
 
 
     @Expose
@@ -28,5 +28,5 @@ data class Result(
     @SerializedName("population") val population: Int,
 
     @Expose
-    @SerializedName("weatherUrl") val weatherUrl: WeatherUrl
+    @SerializedName("weatherUrl") val weatherUrl: List<WeatherUrl>
 )

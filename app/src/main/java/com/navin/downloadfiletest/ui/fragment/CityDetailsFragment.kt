@@ -13,7 +13,6 @@ import com.navin.downloadfiletest.MyApplication
 import com.navin.downloadfiletest.R
 import com.navin.downloadfiletest.di.component.DaggerFragmentComponent
 import com.navin.downloadfiletest.di.module.DetailsFragmentModule
-import com.navin.downloadfiletest.di.module.QueryFragmentModule
 import javax.inject.Inject
 
 class CityDetailsFragment : Fragment() {
@@ -49,17 +48,24 @@ class CityDetailsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_query_city, container, false)
+        val rootView: View = inflater.inflate(R.layout.fragment_city_details, container, false)
+
+        humidityText = rootView.findViewById(R.id.humidity_tv)
+        weatherText = rootView.findViewById(R.id.weather_tv)
+        temperatureText = rootView.findViewById(R.id.temperature_tv)
+        weatherImage = rootView.findViewById(R.id.weather_iv)
+
+        return rootView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        humidityText = view.findViewById(R.id.humidity_tv)
-        weatherText = view.findViewById(R.id.weather_tv)
-        temperatureText = view.findViewById(R.id.temperature_tv)
-        weatherImage = view.findViewById(R.id.weather_iv)
 
-        if (savedInstanceState != null && !savedInstanceState.getString(CITY_NAME).isNullOrEmpty()) {
-            queryCityWeather(savedInstanceState.getString(CITY_NAME)!!)
+        if (arguments != null) {
+            val city: String? = arguments!!.getString(CITY_NAME)
+            if (!city.isNullOrEmpty()) {
+                Log.d(TAG, city)
+                queryCityWeather(city)
+            }
         }
 
         cityDetailsViewModel.getCityDetailsLiveData.observe(viewLifecycleOwner, Observer {
@@ -80,6 +86,7 @@ class CityDetailsFragment : Fragment() {
             }
         })
     }
+
 
     fun queryCityWeather(query: String) {
         cityDetailsViewModel.queryCityDetails(query)

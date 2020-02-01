@@ -1,6 +1,7 @@
 package com.navin.downloadfiletest.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.navin.downloadfiletest.MyApplication
 import com.navin.downloadfiletest.R
@@ -12,10 +13,9 @@ import com.navin.downloadfiletest.ui.fragment.CityQueryFragment
 class MainActivity : AppCompatActivity() {
 
     private val fragmentManager = supportFragmentManager
-    private val fragmentTransaction = fragmentManager.beginTransaction()
 
     companion object {
-        const val TAG = "MainViewActivity"
+        const val TAG = "MainActivity"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,14 +24,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val fragment = CityQueryFragment()
-        fragmentTransaction.add(R.id.fragment_container, fragment)
-        fragmentTransaction.commit()
+        fragmentManager.beginTransaction().add(R.id.fragment_container, fragment)
+            .addToBackStack("CITY_QUERY")
+            .commitAllowingStateLoss()
     }
 
     fun launchCityQuery(city : String) {
         val cityDetailsFragment = CityDetailsFragment.newInstance(city)
-        fragmentTransaction.replace(R.id.fragment_container, cityDetailsFragment)
-        fragmentTransaction.commit()
+        Log.d(TAG,"Launch CityDetailsFragment")
+        fragmentManager.beginTransaction().replace(R.id.fragment_container, cityDetailsFragment)
+            .addToBackStack("CITY_DETAIL")
+            .commitAllowingStateLoss()
     }
 
     private fun getDependencies() {

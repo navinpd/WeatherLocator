@@ -1,7 +1,7 @@
 package com.navin.downloadfiletest.ui.fragment
 
 import android.os.Bundle
-import android.os.Handler
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -26,9 +26,8 @@ class CityQueryFragment : Fragment() {
     private lateinit var searchView: SearchView
     private lateinit var selectableListView: View
 
-    private var queryString: String = ""
-    private val handler: Handler = Handler()
-    private var listOfCity: List<String> = listOf()
+    private var listOfCity = mutableListOf<String>()
+    private var cntr : CountDownTimer? = null
 
     companion object {
         const val TAG = "CityQueryFragment"
@@ -54,41 +53,45 @@ class CityQueryFragment : Fragment() {
         searchView = view.findViewById(R.id.search_sv)
 
         cityQueryViewModel.getSearchResults.observe(viewLifecycleOwner, Observer {
-            if (it != null && !it.result.isNullOrEmpty()) {
+            if (it != null && it.search_api != null && !it.search_api.result.isNullOrEmpty()) {
                 //Clear List items
-                listOfCity = listOf()
+                listOfCity = mutableListOf()
 
-                val size: Int = it.result.size
+                var size: Int = it.search_api.result.size
                 while (size > 0) {
-                    // Put list items in list
-                    Log.d(TAG, it.result.get(size - 1).areaName.__cdata)
-                    listOfCity.toMutableList().add(it.result.get(size - 1).areaName.__cdata)
+                    // Put result items in listOfCity
+                    Log.d(TAG, it.search_api.result.get(size - 1).areaName[0].value)
+
+                    listOfCity.add(it.search_api.result.get(size - 1).areaName[0].value)
+
+                    size -= 1
                 }
+                Log.d(TAG, "Got City list $listOfCity")
 
-                // for test delay 2S and query for city weather
-                handler.postDelayed({
-
-                    getCityDetail(listOfCity[0])
-
-                }, 2000)
+                //TODO: Do this onclick of adapter
+                (activity as MainActivity).launchCityQuery((listOfCity[0]))
             }
         })
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(var1: String?): Boolean {
-                return false
+                return true
             }
 
             override fun onQueryTextChange(searchTerm: String?): Boolean {
-                queryString = searchTerm!!
-                handler.removeCallbacksAndMessages(null)
+                if (cntr != null) {
+                    cntr?.cancel()
+                }
+                cntr = object : CountDownTimer(500, 500) {
+                    override fun onTick(millisUntilFinished: Long) {
+                    }
 
-                handler.postDelayed(Runnable {
-                    //Put your call to the server here (with mQueryString)
-
-                    if (!queryString.isNullOrEmpty())
-                        cityQueryViewModel.getSearchResult(queryString!!)
-                }, 400)
+                    override fun onFinish() {
+                        cityQueryViewModel.getSearchResult(searchTerm!!)
+                        cntr?.cancel()
+                    }
+                }
+                cntr?.start()
                 return true
             }
 
@@ -96,11 +99,6 @@ class CityQueryFragment : Fragment() {
 
         super.onViewCreated(view, savedInstanceState)
     }
-
-    private fun getCityDetail(cityName: String) {
-        (activity as MainActivity).launchCityQuery(cityName)
-    }
-
 
     override fun onDestroy() {
         super.onDestroy()
