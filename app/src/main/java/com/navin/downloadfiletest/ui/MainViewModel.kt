@@ -14,36 +14,31 @@ class MainViewModel @Inject constructor(
     private val networkService: NetworkService
 ) : ViewModel() {
 
-    val getSearchResults = MutableLiveData<Search_api>()
+//    val getSearchResults = MutableLiveData<Search_api>()
 
-    fun getSearchResult(query: String) {
-        compositeDisposable.add(
-//            networkService.doSearchCity(queryText = query, numOfResults = 3)
-//                .subscribeOn(Schedulers.io())
-//                .subscribe(
-//                    {
-//                        getSearchResults.postValue(it.search_api)
-//                    },
-//                    {
-//                        Log.d(MainActivity.TAG, it.toString())
-//                    }
-//                )
-            networkService.getWeatherDetails(queryText = query)
-                .subscribeOn(Schedulers.io())
-                .subscribe(
-                    {
-                        //                        getSearchResults.postValue(it.data)
-                    },
-                    {
-                        Log.d(MainActivity.TAG, it.toString())
-                    }
-                )
-        )
-    }
-
-
-    fun onDestroy() {
-        compositeDisposable.clear()
-    }
+//    fun getSearchResult(query: String) {
+//        compositeDisposable.add(
+////            networkService.doSearchCity(queryText = query, numOfResults = 3)
+////                .subscribeOn(Schedulers.io())
+////                .subscribe(
+////                    {
+////                        getSearchResults.postValue(it.search_api)
+////                    },
+////                    {
+////                        Log.d(MainActivity.TAG, it.toString())
+////                    }
+////                )
+////            networkService.getWeatherDetails(queryText = query)
+////                .subscribeOn(Schedulers.io())
+////                .subscribe(
+////                    {
+////                        //                        getSearchResults.postValue(it.data)
+////                    },
+////                    {
+////                        Log.d(MainActivity.TAG, it.toString())
+////                    }
+////                )
+//        )
+//    }
 
 }

@@ -21,7 +21,7 @@ class ApplicationModule(private val application: MyApplication) {
     }
 
     @Provides
-    fun provideCompositDisposable(): CompositeDisposable {
+    fun provideCompositeDisposable(): CompositeDisposable {
         return CompositeDisposable()
     }
 

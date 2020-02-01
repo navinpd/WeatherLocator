@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Get Weather</string>
+
+<!--    City Details -->
+    <string name="in_degree_c">%1$s in degreeC</string>
+    <string name="humidity">%1$s humidity</string>
+
+
 </resources>
