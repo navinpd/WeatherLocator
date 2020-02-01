@@ -12,9 +12,7 @@ public class ActivityModule(private val mainActivity: MainActivity) {
 
     @Provides
     @ActivityContext
-    fun provideContext(): Context {
-        return mainActivity
-    }
+    fun provideContext(): Context = mainActivity
 
 
 }

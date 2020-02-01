@@ -2,7 +2,6 @@ package com.navin.downloadfiletest.ui.fragment
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.navin.downloadfiletest.data.remote.NetworkService
 import com.navin.downloadfiletest.data.remote.response.weather_response.Data
 import com.navin.downloadfiletest.di.FragmentScope
@@ -14,8 +13,7 @@ import javax.inject.Inject
 @FragmentScope
 class CityDetailsViewModel @Inject constructor(
     private val compositeDisposable: CompositeDisposable,
-    private val networkService: NetworkService
-) : ViewModel() {
+    private val networkService: NetworkService) {
 
     val getCityDetailsLiveData: MutableLiveData<Data> = MutableLiveData()
 

@@ -5,10 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.navin.downloadfiletest.data.remote.NetworkService
 import com.navin.downloadfiletest.data.remote.response.search_response.Search_api
+import com.navin.downloadfiletest.di.ActivityScope
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
+@ActivityScope
 class MainViewModel @Inject constructor(
     private val compositeDisposable: CompositeDisposable,
     private val networkService: NetworkService

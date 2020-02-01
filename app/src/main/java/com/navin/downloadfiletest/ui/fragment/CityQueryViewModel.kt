@@ -14,7 +14,7 @@ import javax.inject.Inject
 @FragmentScope
 class CityQueryViewModel  @Inject constructor(
     private val compositeDisposable: CompositeDisposable,
-    private val networkService: NetworkService) : ViewModel() {
+    private val networkService: NetworkService) {
 
     val getSearchResults = MutableLiveData<Search_api>()
 

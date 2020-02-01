@@ -7,17 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import coil.api.load
 import com.navin.downloadfiletest.MyApplication
 import com.navin.downloadfiletest.R
-import com.navin.downloadfiletest.data.remote.NetworkService
 import com.navin.downloadfiletest.di.component.DaggerFragmentComponent
-import com.navin.downloadfiletest.di.module.FragmentModule
-import io.reactivex.disposables.CompositeDisposable
+import com.navin.downloadfiletest.di.module.DetailsFragmentModule
+import com.navin.downloadfiletest.di.module.QueryFragmentModule
 import javax.inject.Inject
 
-class CityDetailsFragment : BaseFragment() {
+class CityDetailsFragment : Fragment() {
 
     @Inject
     lateinit var cityDetailsViewModel: CityDetailsViewModel
@@ -94,7 +93,7 @@ class CityDetailsFragment : BaseFragment() {
                 (context!!
                     .applicationContext as MyApplication).applicationComponent
             )
-            .fragmentModule(FragmentModule(this)) // this is shown as deprecated as no instance provided by it is being injected
+            .detailsFragmentModule(DetailsFragmentModule(this)) // this is shown as deprecated as no instance provided by it is being injected
             .build()
             .inject(this)
     }

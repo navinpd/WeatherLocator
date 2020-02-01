@@ -7,16 +7,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.navin.downloadfiletest.MyApplication
 import com.navin.downloadfiletest.R
 import com.navin.downloadfiletest.di.component.DaggerFragmentComponent
-import com.navin.downloadfiletest.di.module.FragmentModule
+import com.navin.downloadfiletest.di.module.QueryFragmentModule
 import com.navin.downloadfiletest.ui.MainActivity
 import javax.inject.Inject
 
 
-class CityQueryFragment : BaseFragment() {
+class CityQueryFragment : Fragment() {
 
     @Inject
     lateinit var cityQueryViewModel: CityQueryViewModel
@@ -34,8 +35,8 @@ class CityQueryFragment : BaseFragment() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         getDependencies()
+        super.onCreate(savedInstanceState)
     }
 
 
@@ -53,7 +54,7 @@ class CityQueryFragment : BaseFragment() {
         searchView = view.findViewById(R.id.search_sv)
 
         cityQueryViewModel.getSearchResults.observe(viewLifecycleOwner, Observer {
-            if (!it.result.isNullOrEmpty()) {
+            if (it != null && !it.result.isNullOrEmpty()) {
                 //Clear List items
                 listOfCity = listOf()
 
@@ -115,7 +116,7 @@ class CityQueryFragment : BaseFragment() {
                 (context!!
                     .applicationContext as MyApplication).applicationComponent
             )
-            .fragmentModule(FragmentModule(this)) // this is shown as deprecated as no instance provided by it is being injected
+            .queryFragmentModule(QueryFragmentModule(this)) // this is shown as deprecated as no instance provided by it is being injected
             .build()
             .inject(this)
     }

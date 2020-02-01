@@ -9,6 +9,7 @@ import com.navin.downloadfiletest.di.ApplicationContext
 import dagger.Module
 import dagger.Provides
 import io.reactivex.disposables.CompositeDisposable
+import javax.inject.Singleton
 
 @Module
 class ApplicationModule(private val application: MyApplication) {
@@ -16,16 +17,13 @@ class ApplicationModule(private val application: MyApplication) {
 
     @Provides
     @ApplicationContext
-    fun provideContext(): Context {
-        return application.applicationContext
-    }
+    fun provideContext(): Context = application.applicationContext
 
     @Provides
-    fun provideCompositeDisposable(): CompositeDisposable {
-        return CompositeDisposable()
-    }
+    fun provideCompositeDisposable(): CompositeDisposable = CompositeDisposable()
 
     @Provides
+    @Singleton
     fun provideNetworking(): NetworkService {
         return Networking.createNetworking(
             BuildConfig.API_KEY,
