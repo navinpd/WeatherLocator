@@ -13,12 +13,19 @@ import com.navin.downloadfiletest.MyApplication
 import com.navin.downloadfiletest.R
 import com.navin.downloadfiletest.di.component.DaggerFragmentComponent
 import com.navin.downloadfiletest.di.module.DetailsFragmentModule
+import com.squareup.picasso.Picasso
 import javax.inject.Inject
 
 class CityDetailsFragment : Fragment() {
 
     @Inject
     lateinit var cityDetailsViewModel: CityDetailsViewModel
+
+    lateinit var humidityText: TextView
+    lateinit var weatherText: TextView
+    lateinit var weatherImage: ImageView
+    lateinit var temperatureText: TextView
+    lateinit var cityText : TextView
 
     companion object {
         const val TAG = "CityDetailsFragment"
@@ -33,28 +40,14 @@ class CityDetailsFragment : Fragment() {
         }
     }
 
-    lateinit var humidityText: TextView
-    lateinit var weatherText: TextView
-    lateinit var weatherImage: ImageView
-    lateinit var temperatureText: TextView
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getDependencies()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView: View = inflater.inflate(R.layout.fragment_city_details, container, false)
-
-        humidityText = rootView.findViewById(R.id.humidity_tv)
-        weatherText = rootView.findViewById(R.id.weather_tv)
-        temperatureText = rootView.findViewById(R.id.temperature_tv)
-        weatherImage = rootView.findViewById(R.id.weather_iv)
-
+        initView(rootView)
         return rootView
     }
 
@@ -64,35 +57,46 @@ class CityDetailsFragment : Fragment() {
             val city: String? = arguments!!.getString(CITY_NAME)
             if (!city.isNullOrEmpty()) {
                 Log.d(TAG, city)
-                queryCityWeather(city)
+                cityDetailsViewModel.queryCityDetails(city)
             }
         }
 
         cityDetailsViewModel.getCityDetailsLiveData.observe(viewLifecycleOwner, Observer {
             Log.d(TAG, it.toString())
+            val currentCondition = it.current_condition[0]
 
             temperatureText.text =
-                getString(R.string.in_degree_c, it.current_condition[0].temp_C.toString())
+                getString(R.string.in_degree_c, currentCondition.temp_C.toString())
 
             humidityText.text = getString(
-                R.string.humidity, it.current_condition[0].humidity.toString()
+                R.string.humidity, currentCondition.humidity.toString()
             )
 
-            weatherText.text = it.weather[0].toString()
-            weatherImage.load(
-                it.current_condition[0].weatherIconUrl[0].value
-            ) {
-                placeholder(R.drawable.weather_icon)
-            }
+            weatherText.text = getString(
+                R.string.weather_text, it.weather[0].astronomy[0].sunrise,
+                it.weather[0].astronomy[0].sunset,
+                it.weather[0].maxtempC,
+                it.weather[0].mintempC
+            )
+
+            cityText.text = it.request[0].query
+
+            Picasso.get()
+                .load(it.current_condition[0].weatherIconUrl[0].value)
+                .error((R.drawable.weather_icon))
+                .into(weatherImage)
         })
     }
 
+    private fun initView(rootView : View) {
+        humidityText = rootView.findViewById(R.id.humidity_tv)
+        weatherText = rootView.findViewById(R.id.weather_tv)
+        temperatureText = rootView.findViewById(R.id.temperature_tv)
+        weatherImage = rootView.findViewById(R.id.weather_iv)
+        cityText = rootView.findViewById(R.id.city_tv)
 
-    fun queryCityWeather(query: String) {
-        cityDetailsViewModel.queryCityDetails(query)
     }
 
-    // to suppress null pointer exception warning
     private fun getDependencies() {
         DaggerFragmentComponent
             .builder()
@@ -100,7 +104,7 @@ class CityDetailsFragment : Fragment() {
                 (context!!
                     .applicationContext as MyApplication).applicationComponent
             )
-            .detailsFragmentModule(DetailsFragmentModule(this)) // this is shown as deprecated as no instance provided by it is being injected
+            .detailsFragmentModule(DetailsFragmentModule(this))
             .build()
             .inject(this)
     }

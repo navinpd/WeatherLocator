@@ -2,8 +2,9 @@
     <string name="app_name">Get Weather</string>
 
 <!--    City Details -->
-    <string name="in_degree_c">%1$s in degreeC</string>
-    <string name="humidity">%1$s humidity</string>
+    <string name="in_degree_c">\nTemp(°C) %1$s</string>
+    <string name="humidity">\nHumidity %1$s</string>
+    <string name="weather_text">\nWeather: Sunrise: %1$s, Sunset: %2$s\n \t maxTemp(°C): %3$d, minTemp(°C): %4$d</string>
 
 
 </resources>

@@ -19,17 +19,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        getDependencies()
+        setUpDependencies()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val fragment = CityQueryFragment()
-        fragmentManager.beginTransaction().add(R.id.fragment_container, fragment)
+        fragmentManager.beginTransaction().add(R.id.fragment_container, CityQueryFragment())
             .addToBackStack("CITY_QUERY")
             .commitAllowingStateLoss()
     }
 
-    fun launchCityQuery(city : String) {
+    fun launchCityDetails(city : String) {
         val cityDetailsFragment = CityDetailsFragment.newInstance(city)
         Log.d(TAG,"Launch CityDetailsFragment")
         fragmentManager.beginTransaction().replace(R.id.fragment_container, cityDetailsFragment)
@@ -37,7 +36,7 @@ class MainActivity : AppCompatActivity() {
             .commitAllowingStateLoss()
     }
 
-    private fun getDependencies() {
+    private fun setUpDependencies() {
         DaggerActivityComponent
             .builder()
             .applicationComponent((application as MyApplication).applicationComponent)

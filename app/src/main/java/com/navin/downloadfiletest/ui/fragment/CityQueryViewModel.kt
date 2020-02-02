@@ -30,14 +30,15 @@ class CityQueryViewModel  @Inject constructor(
                 .subscribe(
                     {
                         getSearchResults.postValue(it)
+                        Log.d(TAG, it.toString())
                     },
                     {
+                        getSearchResults.postValue(null)
                         Log.d(TAG, it.toString())
                     }
                 )
         )
     }
-
 
     fun onDestroy() {
         compositeDisposable.clear()
