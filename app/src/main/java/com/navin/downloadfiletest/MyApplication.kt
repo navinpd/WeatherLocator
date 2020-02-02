@@ -1,6 +1,7 @@
 package com.navin.downloadfiletest
 
 import android.app.Application
+import android.content.SharedPreferences
 import com.navin.downloadfiletest.data.remote.NetworkService
 import com.navin.downloadfiletest.di.component.ApplicationComponent
 import com.navin.downloadfiletest.di.component.DaggerApplicationComponent
@@ -13,6 +14,9 @@ class MyApplication : Application() {
 
     @Inject
     lateinit var networkService: NetworkService
+
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate() {
         super.onCreate()

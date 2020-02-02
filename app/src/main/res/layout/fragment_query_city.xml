@@ -12,27 +12,27 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:inputType="text"
-        android:paddingStart="-10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_view_rv"
-        android:layout_width="240dp"
-        android:layout_height="350dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginStart="20dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/search_sv"
+        app:layout_constraintEnd_toStartOf="@id/selectable_city_rv"
         app:layout_constraintTop_toBottomOf="@id/search_sv" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/selectable_city_rv"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/search_sv"
+        app:layout_constraintStart_toEndOf="@id/search_view_rv"
         app:layout_constraintTop_toBottomOf="@id/search_sv" />
 
     <TextView
@@ -40,8 +40,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:gravity="center"
-        android:text="No City Has Been Saved"
+        android:text="@string/city_saved"
         android:textSize="24sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/search_sv" />
 

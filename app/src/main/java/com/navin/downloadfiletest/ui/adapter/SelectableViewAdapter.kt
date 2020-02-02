@@ -1,5 +1,6 @@
 package com.navin.downloadfiletest.ui.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,15 +8,21 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.navin.downloadfiletest.R
 
-class SelectableViewAdapter(var cities: MutableList<String>) :
+class SelectableViewAdapter(private var cities: MutableList<String>) :
     RecyclerView.Adapter<SelectableViewAdapter.CityViewHolder>() {
 
     var onClickListener: View.OnClickListener? = null
+
     override fun getItemCount() = cities.size
 
-    fun updateCityList(newUsers: List<String>) {
+    companion object {
+        val TAG = "SelectableViewAdapter"
+    }
+
+    fun updateCityList(newCities: MutableList<String>) {
         cities.clear()
-        cities.addAll(newUsers)
+        cities.addAll(newCities)
+        Log.d(TAG, "$cities")
         notifyDataSetChanged()
     }
 
@@ -29,7 +36,7 @@ class SelectableViewAdapter(var cities: MutableList<String>) :
     }
 
     inner class CityViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val selectableText: TextView = view.findViewById(R.id.selectable_text)
+        private val selectableText: TextView = view.findViewById(R.id.selectable_text)
 
         fun bind(city: String) {
             itemView.tag = city

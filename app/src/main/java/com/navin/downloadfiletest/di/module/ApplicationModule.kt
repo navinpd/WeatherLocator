@@ -1,6 +1,7 @@
 package com.navin.downloadfiletest.di.module
 
 import android.content.Context
+import android.content.SharedPreferences
 import com.navin.downloadfiletest.BuildConfig
 import com.navin.downloadfiletest.MyApplication
 import com.navin.downloadfiletest.data.remote.NetworkService
@@ -32,5 +33,10 @@ class ApplicationModule(private val application: MyApplication) {
             10 * 1024 * 1024
         )
     }
+
+    @Provides
+    @Singleton
+    fun provideSharedPreference(): SharedPreferences =
+        application.getSharedPreferences("Local-Shared-Pref", 0)
 
 }

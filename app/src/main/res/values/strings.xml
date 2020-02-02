@@ -5,6 +5,7 @@
     <string name="in_degree_c">\nTemp(°C) %1$s</string>
     <string name="humidity">\nHumidity %1$s</string>
     <string name="weather_text">\nWeather: Sunrise: %1$s, Sunset: %2$s\n \t maxTemp(°C): %3$d, minTemp(°C): %4$d</string>
+    <string name="city_saved">No City Has Been Saved</string>
 
 
 </resources>

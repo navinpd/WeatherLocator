@@ -10,7 +10,9 @@ import com.navin.downloadfiletest.R
 
 
 class SearchViewAdapter(private var cities: MutableList<String>) : RecyclerView.Adapter<SearchViewAdapter.CityViewHolder>() {
+
     var onClickListener: View.OnClickListener? = null
+
     override fun getItemCount() = cities.size
 
     companion object {
@@ -18,7 +20,7 @@ class SearchViewAdapter(private var cities: MutableList<String>) : RecyclerView.
     }
 
 
-    fun updateCityList(newCities: List<String>) {
+    fun updateCityList(newCities: MutableList<String>) {
         cities.clear()
         cities.addAll(newCities)
         Log.d(TAG, "$cities")
@@ -34,7 +36,7 @@ class SearchViewAdapter(private var cities: MutableList<String>) : RecyclerView.
     }
 
     inner class CityViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val selectableText: TextView = itemView.findViewById(R.id.selectable_text)
+        private val selectableText: TextView = itemView.findViewById(R.id.selectable_text)
 
         fun bind(city: String) {
             itemView.tag = city
@@ -45,7 +47,7 @@ class SearchViewAdapter(private var cities: MutableList<String>) : RecyclerView.
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = CityViewHolder(
-        LayoutInflater.from(parent.context).inflate(R.layout.search_adapter_text, parent, false)
+        LayoutInflater.from(parent.context).inflate(R.layout.adapter_search_text, parent, false)
     )
 }
 
