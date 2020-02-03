@@ -10,14 +10,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.google.gson.Gson
 import com.navin.downloadfiletest.MyApplication
 import com.navin.downloadfiletest.R
 import com.navin.downloadfiletest.di.component.DaggerFragmentComponent
 import com.navin.downloadfiletest.di.module.DetailsFragmentModule
-import com.navin.downloadfiletest.utils.CardList
-import com.navin.downloadfiletest.utils.LOCAL_LIST
-import com.navin.downloadfiletest.utils.LocalCityArray
 import com.squareup.picasso.Picasso
 import javax.inject.Inject
 
@@ -27,7 +23,7 @@ class CityDetailsFragment : Fragment() {
     lateinit var cityDetailsViewModel: CityDetailsViewModel
 
     @Inject
-    lateinit var sharedPreferences: SharedPreferences
+    lateinit var picasso: Picasso
 
     private lateinit var humidityText: TextView
     private lateinit var weatherText: TextView
@@ -93,67 +89,27 @@ class CityDetailsFragment : Fragment() {
 
             cityText.text = it.request[0].query
 
-            Picasso.get()
-                .load(it.current_condition[0].weatherIconUrl[0].value)
+            picasso.load(it.current_condition[0].weatherIconUrl[0].value)
                 .error((R.drawable.weather_icon))
                 .into(weatherImage)
-            saveToLocal(arguments!!.getString(CITY_NAME)!!)
+
+            cityDetailsViewModel.saveToLocal(arguments!!.getString(CITY_NAME)!!)
         })
     }
 
-    private fun saveToLocal(city: String) {
-        val currentCityData = CardList(city, System.currentTimeMillis())
 
-        var savedCityList = LocalCityArray(mutableListOf())
-        var finalCityData = ""
-
-        if (sharedPreferences.getString(LOCAL_LIST, "")!!.isNotEmpty()) {
-            savedCityList = Gson()
-                .fromJson<LocalCityArray>(
-                    sharedPreferences.getString(LOCAL_LIST, ""),
-                    LocalCityArray::class.java
-                )
-        }
-
-        var cityIfPresent: CardList? = null
-
-        when (savedCityList.cardList.size) {
-
-            0 -> {
-                finalCityData = "{\"CardList\":[${currentCityData}]}"
-
-            }
-            else -> {
-                savedCityList.cardList.forEach {
-                    if (it.cityName == city) {
-                        cityIfPresent = it
-                    }
-                }
-                cityIfPresent?.let {
-                    savedCityList.cardList.remove(cityIfPresent!!)
-                }
-
-                savedCityList.cardList.add(0, currentCityData)
-                finalCityData = savedCityList.toString()
-            }
-        }
-
-        if (savedCityList.cardList.size > 10) {
-            savedCityList.cardList.removeAt(10)
-            finalCityData = savedCityList.toString()
-        }
-        Log.d(TAG, "City Details is $finalCityData")
-
-        sharedPreferences.edit().putString(LOCAL_LIST, finalCityData).apply()
+    override fun onDestroy() {
+        super.onDestroy()
+        cityDetailsViewModel.onDestroy()
     }
 
     private fun initView(rootView: View) {
         humidityText = rootView.findViewById(R.id.humidity_tv)
         weatherText = rootView.findViewById(R.id.weather_tv)
         temperatureText = rootView.findViewById(R.id.temperature_tv)
-        weatherImage = rootView.findViewById(R.id.weather_iv)
         cityText = rootView.findViewById(R.id.city_tv)
 
+        weatherImage = rootView.findViewById(R.id.weather_iv)
     }
 
     private fun getDependencies() {

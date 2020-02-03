@@ -6,7 +6,9 @@ import com.navin.downloadfiletest.BuildConfig
 import com.navin.downloadfiletest.MyApplication
 import com.navin.downloadfiletest.data.remote.NetworkService
 import com.navin.downloadfiletest.data.remote.Networking
+import com.navin.downloadfiletest.di.ActivityContext
 import com.navin.downloadfiletest.di.ApplicationContext
+import com.squareup.picasso.Picasso
 import dagger.Module
 import dagger.Provides
 import io.reactivex.disposables.CompositeDisposable
@@ -22,6 +24,11 @@ class ApplicationModule(private val application: MyApplication) {
 
     @Provides
     fun provideCompositeDisposable(): CompositeDisposable = CompositeDisposable()
+
+
+    @Provides
+    @Singleton
+    fun providePicasso() : Picasso = Picasso.get()
 
     @Provides
     @Singleton

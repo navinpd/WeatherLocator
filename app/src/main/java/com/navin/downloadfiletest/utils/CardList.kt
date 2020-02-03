@@ -17,11 +17,4 @@ class CardList(
 
     override fun toString(): String = "{\"cityName\": \"$cityName\", \"timeStamp\":\"$timeStamp\"}"
 
-//    companion object : Comparator<LocalCityData> {
-//        override fun compare(a: LocalCityData, b: LocalCityData): Int {
-//
-//            println("TimeStamp Comparision ${a.timeStamp} ${b.timeStamp}")
-//            return (a.timeStamp - b.timeStamp) as Int
-//        }
-//    }
 }
