@@ -89,12 +89,9 @@ class CityDetailsViewModel @Inject constructor(
             finalCityData = savedCityList.toString()
         }
 
-        Log.d(CityDetailsFragment.TAG, "City Details is $finalCityData")
+        Log.d(TAG, "City Details is $finalCityData")
 
         sharedPreferences.edit().putString(LOCAL_LIST, finalCityData).apply()
-
-
-        sharedPreferences.edit().putString(city, finalCityData).apply()
     }
 
     fun onDestroy() {
