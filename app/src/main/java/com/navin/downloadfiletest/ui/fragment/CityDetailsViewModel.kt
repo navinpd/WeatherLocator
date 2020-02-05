@@ -14,6 +14,10 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
+/**
+ * {@link CityDetailsFragment} Supporting ViewModel to get City weather details.
+ * Also saving the city name into sharePreference for user to see recently searched city
+ */
 @FragmentScope
 class CityDetailsViewModel @Inject constructor(
     private val compositeDisposable: CompositeDisposable,
@@ -22,6 +26,7 @@ class CityDetailsViewModel @Inject constructor(
 
     val getCityDetailsLiveData: MutableLiveData<Data> = MutableLiveData()
     val noInternetLiveData : MutableLiveData<String> = MutableLiveData()
+    val maxLocalAllowedCity = 10
 
     companion object {
         val TAG : String = "CityDetailsViewModel"
@@ -92,9 +97,9 @@ class CityDetailsViewModel @Inject constructor(
             }
         }
 
-        if (savedCityList.cityData.size > 10) {
+        if (savedCityList.cityData.size > maxLocalAllowedCity) {
 
-            savedCityList.cityData.removeAt(10)
+            savedCityList.cityData.removeAt(maxLocalAllowedCity)
             finalCityData = savedCityList.toString()
         }
 

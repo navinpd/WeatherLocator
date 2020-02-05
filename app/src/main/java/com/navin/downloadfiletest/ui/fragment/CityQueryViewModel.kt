@@ -13,6 +13,10 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
+/**
+ * Supporting class for {@link CityQueryFragment} to get city list from server as per text search from user.
+ * Also processing of locally saved City list to be shown to user for selection of recently searched City.
+ */
 @FragmentScope
 class CityQueryViewModel  @Inject constructor(
     private val compositeDisposable: CompositeDisposable,

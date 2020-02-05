@@ -22,7 +22,11 @@ import com.navin.downloadfiletest.ui.adapter.SearchViewAdapter
 import com.navin.downloadfiletest.ui.adapter.SelectableViewAdapter
 import javax.inject.Inject
 
-
+/**
+ * This is launcher fragment from MainActivity. Supporting the user action
+ * to search for city.  Also this is going to save last 10 city names in recent 10 first order.
+ *
+ */
 class CityQueryFragment : Fragment() {
 
     @Inject

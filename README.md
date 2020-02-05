@@ -59,7 +59,7 @@ dependencies {
 
 
 ## TODO
-    Support application rotation.
+    Support device rotation.
     Add UI tests for used Fragments
     Update City details page to show many more items from weather report.
 

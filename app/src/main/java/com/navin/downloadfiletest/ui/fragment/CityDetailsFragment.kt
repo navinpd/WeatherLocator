@@ -18,6 +18,11 @@ import com.navin.downloadfiletest.di.module.DetailsFragmentModule
 import com.squareup.picasso.Picasso
 import javax.inject.Inject
 
+
+/**
+ * This fragment is for user to get City Details from network and get full city weather details.
+ * City list will save last visited city in local for users to make quick access to that.
+ */
 class CityDetailsFragment : Fragment() {
 
     @Inject
