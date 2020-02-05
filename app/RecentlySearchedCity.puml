@@ -1,0 +1,14 @@
+@startuml
+User --> App: Open app
+
+App --> User : List of recently searched cities(<10)
+
+User -> App: Click on any 1 City
+
+App -> Web: Get city weather
+
+Web -> App : City weather details
+
+App -> User : User sees city weather reports(icon, temp..)
+
+@enduml

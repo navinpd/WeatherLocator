@@ -1,0 +1,14 @@
+@startuml
+User --> App : Open app
+
+User -> App : Query for city name
+
+App -> Web : Get list of city from search query
+
+Web -> App : List of city as per search query display to user
+
+User -> App: Click on any 1 City
+
+App -> User : User sees city weather reports(icon, temp..)
+
+@enduml
