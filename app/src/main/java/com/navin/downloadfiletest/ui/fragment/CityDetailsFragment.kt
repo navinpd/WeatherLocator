@@ -1,13 +1,14 @@
 package com.navin.downloadfiletest.ui.fragment
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.navin.downloadfiletest.MyApplication
@@ -30,6 +31,9 @@ class CityDetailsFragment : Fragment() {
     private lateinit var weatherImage: ImageView
     private lateinit var temperatureText: TextView
     private lateinit var cityText: TextView
+    private lateinit var serverError: TextView
+    private lateinit var weatherHolder: ConstraintLayout
+    private lateinit var progressBar: ProgressBar
 
     companion object {
         const val TAG = "CityDetailsFragment"
@@ -65,12 +69,20 @@ class CityDetailsFragment : Fragment() {
             val city: String? = arguments!!.getString(CITY_NAME)
             if (!city.isNullOrEmpty()) {
                 Log.d(TAG, city)
+
+                //Network query for City
                 cityDetailsViewModel.queryCityDetails(city)
+                progressBar.visibility = View.VISIBLE
             }
         }
 
         cityDetailsViewModel.getCityDetailsLiveData.observe(viewLifecycleOwner, Observer {
             Log.d(TAG, it.toString())
+
+            progressBar.visibility = View.GONE
+            weatherHolder.visibility = View.VISIBLE
+            serverError.visibility = View.GONE
+
             val currentCondition = it.current_condition[0]
 
             temperatureText.text =
@@ -95,6 +107,20 @@ class CityDetailsFragment : Fragment() {
 
             cityDetailsViewModel.saveToLocal(arguments!!.getString(CITY_NAME)!!)
         })
+
+        cityDetailsViewModel.noInternetLiveData.observe(viewLifecycleOwner, Observer {
+            weatherHolder.visibility = View.GONE
+            serverError.visibility = View.VISIBLE
+            progressBar.visibility = View.GONE
+
+            if (it.contains("UnknownHostException")) {
+                serverError.text = getString(R.string.no_internet)
+
+            } else {
+
+                serverError.text = it
+            }
+        })
     }
 
 
@@ -108,8 +134,10 @@ class CityDetailsFragment : Fragment() {
         weatherText = rootView.findViewById(R.id.weather_tv)
         temperatureText = rootView.findViewById(R.id.temperature_tv)
         cityText = rootView.findViewById(R.id.city_tv)
-
+        weatherHolder = rootView.findViewById(R.id.weather_details_cv)
+        serverError = rootView.findViewById(R.id.network_error)
         weatherImage = rootView.findViewById(R.id.weather_iv)
+        progressBar = rootView.findViewById(R.id.progress_bar)
     }
 
     private fun getDependencies() {

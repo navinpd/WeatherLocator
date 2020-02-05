@@ -5,16 +5,16 @@ import com.google.gson.annotations.SerializedName
 
 class LocalCityArray (
     @Expose
-    @SerializedName("CardList")
-    val cardList : MutableList<CardList>
+    @SerializedName("CityData")
+    val cityData : MutableList<CityData>
 ) {
 
     override fun toString(): String {
-        return "{\"CardList\":$cardList}"
+        return "{\"CityData\":$cityData}"
     }
 
 //{
-//  "CardList": [
+//  "CityData": [
 //    {
 //      "cityName": "Jharia-India ",
 //      "timeStamp": "1580640497435"

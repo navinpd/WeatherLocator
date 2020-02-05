@@ -7,8 +7,7 @@ import com.google.gson.Gson
 import com.navin.downloadfiletest.data.remote.NetworkService
 import com.navin.downloadfiletest.data.remote.response.weather_response.Data
 import com.navin.downloadfiletest.di.FragmentScope
-import com.navin.downloadfiletest.ui.MainActivity
-import com.navin.downloadfiletest.utils.CardList
+import com.navin.downloadfiletest.utils.CityData
 import com.navin.downloadfiletest.utils.LOCAL_LIST
 import com.navin.downloadfiletest.utils.LocalCityArray
 import io.reactivex.disposables.CompositeDisposable
@@ -22,12 +21,16 @@ class CityDetailsViewModel @Inject constructor(
     private val sharedPreferences: SharedPreferences) {
 
     val getCityDetailsLiveData: MutableLiveData<Data> = MutableLiveData()
+    val noInternetLiveData : MutableLiveData<String> = MutableLiveData()
 
     companion object {
         val TAG : String = "CityDetailsViewModel"
     }
 
-
+    /**
+     * Method to get city from user selection to get from weather server.
+     * @param query cityName user is interested for
+     */
     fun queryCityDetails(query: String) {
         compositeDisposable.add(
             networkService.getWeatherDetails(queryText = query)
@@ -38,14 +41,20 @@ class CityDetailsViewModel @Inject constructor(
                     },
                     {
                         Log.d(TAG, it.toString())
+                        noInternetLiveData.postValue(it.toString())
                     }
                 )
         )
     }
 
-    //Logic to save searched city details in local
+    /**
+     * Logic to save searched city details in local
+     * @param city: save the name of city user has already visited in sharedPreference
+     */
     fun saveToLocal(city: String) {
-        val currentCityData = CardList(city, System.currentTimeMillis())
+        if(city.isEmpty())
+            return
+        val currentCityData = CityData(city, System.currentTimeMillis())
 
         var savedCityList = LocalCityArray(mutableListOf())
         var finalCityData: String?
@@ -58,34 +67,34 @@ class CityDetailsViewModel @Inject constructor(
                 )
         }
 
-        var cityIfPresent: CardList? = null
+        var cityIfPresent: CityData? = null
 
-        when (savedCityList.cardList.size) {
+        when (savedCityList.cityData.size) {
 
             0 -> {
-                finalCityData = "{\"CardList\":[${currentCityData}]}"
+                finalCityData = "{\"CityData\":[${currentCityData}]}"
 
             }
             else -> {
-                savedCityList.cardList.forEach {
+                savedCityList.cityData.forEach {
                     if (it.cityName == city) {
                         cityIfPresent = it
                     }
                 }
 
-                // Remove city name if it's already present
+                // Remove city name if it's already been visited earlier
                 cityIfPresent?.let {
-                    savedCityList.cardList.remove(cityIfPresent!!)
+                    savedCityList.cityData.remove(cityIfPresent!!)
                 }
 
-                savedCityList.cardList.add(0, currentCityData)
+                savedCityList.cityData.add(0, currentCityData)
                 finalCityData = savedCityList.toString()
             }
         }
 
-        if (savedCityList.cardList.size > 10) {
+        if (savedCityList.cityData.size > 10) {
 
-            savedCityList.cardList.removeAt(10)
+            savedCityList.cityData.removeAt(10)
             finalCityData = savedCityList.toString()
         }
 

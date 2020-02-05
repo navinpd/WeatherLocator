@@ -8,6 +8,7 @@
     <string name="city_saved">No City Has Been Saved</string>
     <string name="local_data">Local Data</string>
     <string name="search_city_hint">Search City For Weather</string>
+    <string name="no_internet">No Internet Connection</string>
 
 
 </resources>

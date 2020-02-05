@@ -55,10 +55,10 @@ class CityQueryViewModel  @Inject constructor(
                     localList,
                     LocalCityArray::class.java
                 )
-            localCityArray.cardList
+            localCityArray.cityData
                 .sortedWith(compareBy { it.timeStamp })
 
-            localCityArray.cardList.forEach {
+            localCityArray.cityData.forEach {
                 listOfSelectableCity.add(it.cityName)
             }
         }
