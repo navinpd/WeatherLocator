@@ -6,7 +6,6 @@ import com.navin.downloadfiletest.BuildConfig
 import com.navin.downloadfiletest.MyApplication
 import com.navin.downloadfiletest.data.remote.NetworkService
 import com.navin.downloadfiletest.data.remote.Networking
-import com.navin.downloadfiletest.di.ActivityContext
 import com.navin.downloadfiletest.di.ApplicationContext
 import com.squareup.picasso.Picasso
 import dagger.Module

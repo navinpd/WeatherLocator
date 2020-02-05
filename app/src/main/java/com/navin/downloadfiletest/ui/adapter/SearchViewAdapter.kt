@@ -22,8 +22,11 @@ class SearchViewAdapter(private var cities: MutableList<String>) : RecyclerView.
 
     fun updateCityList(newCities: MutableList<String>) {
         cities.clear()
+
         cities.addAll(newCities)
+
         Log.d(TAG, "$cities")
+
         notifyDataSetChanged()
     }
 
@@ -36,6 +39,7 @@ class SearchViewAdapter(private var cities: MutableList<String>) : RecyclerView.
     }
 
     inner class CityViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
         private val selectableText: TextView = itemView.findViewById(R.id.selectable_text)
 
         fun bind(city: String) {
