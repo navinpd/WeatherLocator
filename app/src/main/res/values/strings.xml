@@ -10,5 +10,7 @@
     <string name="search_city_hint">Search City For Weather</string>
     <string name="no_internet">No Internet Connection</string>
 
+    <string name="go_for_city">Go for details of: %1$s</string>
+    <string name="you_clicked">You selected: %1$s</string>
 
 </resources>

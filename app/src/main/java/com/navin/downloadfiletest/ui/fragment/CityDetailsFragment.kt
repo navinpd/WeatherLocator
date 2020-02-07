@@ -5,10 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.navin.downloadfiletest.MyApplication
@@ -16,6 +12,7 @@ import com.navin.downloadfiletest.R
 import com.navin.downloadfiletest.di.component.DaggerFragmentComponent
 import com.navin.downloadfiletest.di.module.DetailsFragmentModule
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.fragment_city_details.*
 import javax.inject.Inject
 
 
@@ -30,15 +27,6 @@ class CityDetailsFragment : Fragment() {
 
     @Inject
     lateinit var picasso: Picasso
-
-    private lateinit var humidityText: TextView
-    private lateinit var weatherText: TextView
-    private lateinit var weatherImage: ImageView
-    private lateinit var temperatureText: TextView
-    private lateinit var cityText: TextView
-    private lateinit var serverError: TextView
-    private lateinit var weatherHolder: ConstraintLayout
-    private lateinit var progressBar: ProgressBar
 
     companion object {
         const val TAG = "CityDetailsFragment"
@@ -62,11 +50,7 @@ class CityDetailsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val rootView: View = inflater.inflate(R.layout.fragment_city_details, container, false)
-        initView(rootView)
-        return rootView
-    }
+    ): View? = inflater.inflate(R.layout.fragment_city_details, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
@@ -77,53 +61,53 @@ class CityDetailsFragment : Fragment() {
 
                 //Network query for City
                 cityDetailsViewModel.queryCityDetails(city)
-                progressBar.visibility = View.VISIBLE
+                progress_bar.visibility = View.VISIBLE
             }
         }
 
         cityDetailsViewModel.getCityDetailsLiveData.observe(viewLifecycleOwner, Observer {
             Log.d(TAG, it.toString())
 
-            progressBar.visibility = View.GONE
-            weatherHolder.visibility = View.VISIBLE
-            serverError.visibility = View.GONE
+            progress_bar.visibility = View.GONE
+            weather_details_cv.visibility = View.VISIBLE
+            network_error.visibility = View.GONE
 
             val currentCondition = it.current_condition[0]
 
-            temperatureText.text =
+            temperature_tv.text =
                 getString(R.string.in_degree_c, currentCondition.temp_C.toString())
 
-            humidityText.text = getString(
+            humidity_tv.text = getString(
                 R.string.humidity, currentCondition.humidity.toString()
             )
 
-            weatherText.text = getString(
+            weather_tv.text = getString(
                 R.string.weather_text, it.weather[0].astronomy[0].sunrise,
                 it.weather[0].astronomy[0].sunset,
                 it.weather[0].maxtempC,
                 it.weather[0].mintempC
             )
 
-            cityText.text = it.request[0].query
+            city_tv.text = it.request[0].query
 
             picasso.load(it.current_condition[0].weatherIconUrl[0].value)
                 .error((R.drawable.weather_icon))
-                .into(weatherImage)
+                .into(weather_iv)
 
             cityDetailsViewModel.saveToLocal(arguments!!.getString(CITY_NAME)!!)
         })
 
         cityDetailsViewModel.noInternetLiveData.observe(viewLifecycleOwner, Observer {
-            weatherHolder.visibility = View.GONE
-            serverError.visibility = View.VISIBLE
-            progressBar.visibility = View.GONE
+            weather_details_cv.visibility = View.GONE
+            network_error.visibility = View.VISIBLE
+            progress_bar.visibility = View.GONE
 
             if (it.contains("UnknownHostException")) {
-                serverError.text = getString(R.string.no_internet)
+                network_error.text = getString(R.string.no_internet)
 
             } else {
+                network_error.text = it
 
-                serverError.text = it
             }
         })
     }
@@ -132,17 +116,6 @@ class CityDetailsFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         cityDetailsViewModel.onDestroy()
-    }
-
-    private fun initView(rootView: View) {
-        humidityText = rootView.findViewById(R.id.humidity_tv)
-        weatherText = rootView.findViewById(R.id.weather_tv)
-        temperatureText = rootView.findViewById(R.id.temperature_tv)
-        cityText = rootView.findViewById(R.id.city_tv)
-        weatherHolder = rootView.findViewById(R.id.weather_details_cv)
-        serverError = rootView.findViewById(R.id.network_error)
-        weatherImage = rootView.findViewById(R.id.weather_iv)
-        progressBar = rootView.findViewById(R.id.progress_bar)
     }
 
     private fun getDependencies() {
