@@ -23,16 +23,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        fragmentManager.beginTransaction().add(R.id.fragment_container, CityQueryFragment())
-            .addToBackStack("CITY_QUERY")
+        fragmentManager.beginTransaction()
+            .add(R.id.fragment_container, CityQueryFragment())
+            .addToBackStack(CityQueryFragment.TAG)
             .commitAllowingStateLoss()
     }
 
-    fun launchCityDetails(city : String) {
-        val cityDetailsFragment = CityDetailsFragment.newInstance(city)
-        Log.d(TAG,"Launch CityDetailsFragment")
-        fragmentManager.beginTransaction().replace(R.id.fragment_container, cityDetailsFragment)
-            .addToBackStack("CITY_DETAIL")
+    fun launchCityDetails(city: String) {
+        Log.d(TAG, "Launch CityDetailsFragment")
+
+        fragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, CityDetailsFragment.newInstance(city))
+            .addToBackStack(CityDetailsFragment.TAG)
             .commitAllowingStateLoss()
     }
 
