@@ -15,9 +15,7 @@ class SelectableViewAdapter(private var cities: MutableList<String>) :
 
     override fun getItemCount() = cities.size
 
-    companion object {
-        val TAG = "SelectableViewAdapter"
-    }
+    val TAG = this.javaClass.simpleName
 
     fun updateCityList(newCities: MutableList<String>) {
         cities.clear()

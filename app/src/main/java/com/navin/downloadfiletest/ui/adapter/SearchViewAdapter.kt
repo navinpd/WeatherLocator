@@ -15,9 +15,7 @@ class SearchViewAdapter(private var cities: MutableList<String>) : RecyclerView.
 
     override fun getItemCount() = cities.size
 
-    companion object {
-        val TAG = "SearchViewAdapter"
-    }
+    val TAG = this.javaClass.simpleName
 
 
     fun updateCityList(newCities: MutableList<String>) {

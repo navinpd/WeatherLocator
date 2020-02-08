@@ -2,48 +2,41 @@ package com.navin.downloadfiletest.ui
 
 import android.os.Bundle
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
-import com.navin.downloadfiletest.MyApplication
 import com.navin.downloadfiletest.R
-import com.navin.downloadfiletest.di.component.DaggerActivityComponent
-import com.navin.downloadfiletest.di.module.ActivityModule
+import com.navin.downloadfiletest.di.component.ActivityComponent
+import com.navin.downloadfiletest.ui.base.BaseActivity
 import com.navin.downloadfiletest.ui.fragment.CityDetailsFragment
 import com.navin.downloadfiletest.ui.fragment.CityQueryFragment
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity<MainViewModel>() {
 
     private val fragmentManager = supportFragmentManager
 
-    companion object {
-        const val TAG = "MainActivity"
-    }
+    val TAG = this.javaClass.simpleName
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        setUpDependencies()
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        fragmentManager.beginTransaction()
-            .add(R.id.fragment_container, CityQueryFragment())
-            .addToBackStack(CityQueryFragment.TAG)
-            .commitAllowingStateLoss()
-    }
 
     fun launchCityDetails(city: String) {
         Log.d(TAG, "Launch CityDetailsFragment")
 
         fragmentManager.beginTransaction()
             .replace(R.id.fragment_container, CityDetailsFragment.newInstance(city))
-            .addToBackStack(CityDetailsFragment.TAG)
+            .addToBackStack(CityDetailsFragment::class.java.simpleName)
             .commitAllowingStateLoss()
     }
 
-    private fun setUpDependencies() {
-        DaggerActivityComponent
-            .builder()
-            .applicationComponent((application as MyApplication).applicationComponent)
-            .activityModule(ActivityModule(this))
-            .build()
-            .inject(this)
+    fun launchCityQuery() {
+        fragmentManager.beginTransaction()
+            .add(R.id.fragment_container, CityQueryFragment())
+            .addToBackStack(CityDetailsFragment::class.java.simpleName)
+            .commitAllowingStateLoss()
     }
+
+    override fun provideLayoutId(): Int = R.layout.activity_main
+
+    override fun setUpView(savedInstanceState: Bundle?) {
+        launchCityQuery()
+    }
+
+    override fun injectDependencies(activityComponent: ActivityComponent) =
+        activityComponent.inject(this)
 }

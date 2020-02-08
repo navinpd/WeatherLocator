@@ -2,15 +2,11 @@ package com.navin.downloadfiletest.ui.fragment
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.navin.downloadfiletest.MyApplication
 import com.navin.downloadfiletest.R
-import com.navin.downloadfiletest.di.component.DaggerFragmentComponent
-import com.navin.downloadfiletest.di.module.DetailsFragmentModule
+import com.navin.downloadfiletest.di.component.FragmentComponent
+import com.navin.downloadfiletest.ui.base.BaseFragment
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_city_details.*
 import javax.inject.Inject
@@ -20,7 +16,7 @@ import javax.inject.Inject
  * This fragment is for user to get City Details from network and get full city weather details.
  * City list will save last visited city in local for users to make quick access to that.
  */
-class CityDetailsFragment : Fragment() {
+class CityDetailsFragment : BaseFragment<CityDetailsViewModel>() {
 
     @Inject
     lateinit var cityDetailsViewModel: CityDetailsViewModel
@@ -28,8 +24,9 @@ class CityDetailsFragment : Fragment() {
     @Inject
     lateinit var picasso: Picasso
 
+    val TAG = this.javaClass.simpleName
+
     companion object {
-        const val TAG = "CityDetailsFragment"
         const val CITY_NAME = "CityDetailsFragment.CITY_NAME"
 
         fun newInstance(city: String): CityDetailsFragment {
@@ -41,19 +38,7 @@ class CityDetailsFragment : Fragment() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        getDependencies()
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_city_details, container, false)
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
+    override fun setUpViews(view: View) {
         if (arguments != null) {
             val city: String? = arguments!!.getString(CITY_NAME)
             if (!city.isNullOrEmpty()) {
@@ -112,22 +97,9 @@ class CityDetailsFragment : Fragment() {
         })
     }
 
+    override fun getLayoutReference(): Int = R.layout.fragment_city_details
 
-    override fun onDestroy() {
-        super.onDestroy()
-        cityDetailsViewModel.onDestroy()
-    }
-
-    private fun getDependencies() {
-        DaggerFragmentComponent
-            .builder()
-            .applicationComponent(
-                (context!!
-                    .applicationContext as MyApplication).applicationComponent
-            )
-            .detailsFragmentModule(DetailsFragmentModule(this))
-            .build()
-            .inject(this)
-    }
+    override fun injectDependencies(fragmentComponent: FragmentComponent) =
+        fragmentComponent.inject(this)
 
 }

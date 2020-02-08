@@ -1,23 +1,18 @@
 package com.navin.downloadfiletest.ui.fragment
 
-import android.os.Bundle
 import android.os.CountDownTimer
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.navin.downloadfiletest.MyApplication
 import com.navin.downloadfiletest.R
-import com.navin.downloadfiletest.di.component.DaggerFragmentComponent
-import com.navin.downloadfiletest.di.module.QueryFragmentModule
+import com.navin.downloadfiletest.di.component.FragmentComponent
 import com.navin.downloadfiletest.ui.MainActivity
 import com.navin.downloadfiletest.ui.adapter.SearchViewAdapter
 import com.navin.downloadfiletest.ui.adapter.SelectableViewAdapter
+import com.navin.downloadfiletest.ui.base.BaseFragment
 import kotlinx.android.synthetic.main.fragment_query_city.*
 import javax.inject.Inject
 
@@ -26,7 +21,7 @@ import javax.inject.Inject
  * to search for city.  Also this is going to save last 10 city names in recent 10 first order.
  *
  */
-class CityQueryFragment : Fragment() {
+class CityQueryFragment : BaseFragment<CityQueryViewModel>() {
 
     @Inject
     lateinit var cityQueryViewModel: CityQueryViewModel
@@ -40,22 +35,7 @@ class CityQueryFragment : Fragment() {
     private var listOfSearchCity = mutableListOf<String>()
     private var listOfSelectableCity = mutableListOf<String>()
 
-    companion object {
-        const val TAG = "CityQueryFragment"
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        getDependencies()
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_query_city, container, false)
-    }
+    val TAG = this.javaClass.simpleName
 
     private val searchItemClickListener =
         View.OnClickListener { view ->
@@ -90,9 +70,21 @@ class CityQueryFragment : Fragment() {
             search_sv.setQuery("", true)
         }
 
+    override fun onResume() {
+        super.onResume()
+        cityQueryViewModel.updateLocallySavedList()
+    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        setUpViews()
+    override fun setUpViews(view: View) {
+        searchViewAdapter = SearchViewAdapter(listOfSearchCity)
+        search_view_rv.layoutManager = LinearLayoutManager(this.context)
+        search_view_rv.adapter = searchViewAdapter
+        searchViewAdapter.setOnItemClickListener(searchItemClickListener)
+
+        selectableViewAdapter = SelectableViewAdapter(listOfSelectableCity)
+        selectable_city_rv.layoutManager = LinearLayoutManager(this.context)
+        selectable_city_rv.adapter = selectableViewAdapter
+        selectableViewAdapter.setOnItemClickListener(selectItemClickListener)
 
         cityQueryViewModel.getSearchResults.observe(viewLifecycleOwner, Observer {
 
@@ -157,43 +149,12 @@ class CityQueryFragment : Fragment() {
 
         })
 
-        super.onViewCreated(view, savedInstanceState)
     }
 
-    override fun onResume() {
-        super.onResume()
-        cityQueryViewModel.updateLocallySavedList()
-    }
+    override fun getLayoutReference(): Int = R.layout.fragment_query_city
 
-    private fun setUpViews() {
-        searchViewAdapter = SearchViewAdapter(listOfSearchCity)
-        search_view_rv.layoutManager = LinearLayoutManager(this.context)
-        search_view_rv.adapter = searchViewAdapter
-        searchViewAdapter.setOnItemClickListener(searchItemClickListener)
-
-        selectableViewAdapter = SelectableViewAdapter(listOfSelectableCity)
-        selectable_city_rv.layoutManager = LinearLayoutManager(this.context)
-        selectable_city_rv.adapter = selectableViewAdapter
-        selectableViewAdapter.setOnItemClickListener(selectItemClickListener)
-
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        cityQueryViewModel.onDestroy()
-    }
-
-
-    private fun getDependencies() {
-        DaggerFragmentComponent
-            .builder()
-            .applicationComponent(
-                (context!!
-                    .applicationContext as MyApplication).applicationComponent
-            )
-            .queryFragmentModule(QueryFragmentModule(this))
-            .build()
-            .inject(this)
+    override fun injectDependencies(fragmentComponent: FragmentComponent) {
+        fragmentComponent.inject(this)
     }
 
 }

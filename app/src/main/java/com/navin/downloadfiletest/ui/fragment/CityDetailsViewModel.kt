@@ -4,9 +4,11 @@ import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
+import com.navin.downloadfiletest.data.remote.NetworkHelper
 import com.navin.downloadfiletest.data.remote.NetworkService
 import com.navin.downloadfiletest.data.remote.response.weather_response.Data
 import com.navin.downloadfiletest.di.FragmentScope
+import com.navin.downloadfiletest.ui.base.BaseViewModel
 import com.navin.downloadfiletest.utils.CityData
 import com.navin.downloadfiletest.utils.LOCAL_LIST
 import com.navin.downloadfiletest.utils.LocalCityArray
@@ -20,17 +22,17 @@ import javax.inject.Inject
  */
 @FragmentScope
 class CityDetailsViewModel @Inject constructor(
-    private val compositeDisposable: CompositeDisposable,
-    private val networkService: NetworkService,
-    private val sharedPreferences: SharedPreferences) {
+    compositeDisposable: CompositeDisposable,
+    val networkService: NetworkService,
+    val sharedPreferences: SharedPreferences,
+    networkHelper: NetworkHelper
+) : BaseViewModel(networkHelper, compositeDisposable) {
 
     val getCityDetailsLiveData: MutableLiveData<Data> = MutableLiveData()
-    val noInternetLiveData : MutableLiveData<String> = MutableLiveData()
+    val noInternetLiveData: MutableLiveData<String> = MutableLiveData()
     val maxLocalAllowedCity = 10
 
-    companion object {
-        val TAG : String = "CityDetailsViewModel"
-    }
+    val TAG = this.javaClass.simpleName
 
     /**
      * Method to get city from user selection to get from weather server.
@@ -57,11 +59,12 @@ class CityDetailsViewModel @Inject constructor(
      * @param city: save the name of city user has already visited in sharedPreference
      */
     fun saveToLocal(city: String) {
-        if(city.isEmpty())
-            return
+        if (city.isEmpty()) return
+
         val currentCityData = CityData(city, System.currentTimeMillis())
 
         var savedCityList = LocalCityArray(mutableListOf())
+
         var finalCityData: String?
 
         if (sharedPreferences.getString(LOCAL_LIST, "")!!.isNotEmpty()) {
@@ -108,8 +111,13 @@ class CityDetailsViewModel @Inject constructor(
         sharedPreferences.edit().putString(LOCAL_LIST, finalCityData).apply()
     }
 
-    fun onDestroy() {
+    override fun onCleared() {
+        super.onCleared()
         compositeDisposable.clear()
+    }
+
+    override fun onCreate() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 }

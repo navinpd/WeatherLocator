@@ -4,9 +4,11 @@ import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
+import com.navin.downloadfiletest.data.remote.NetworkHelper
 import com.navin.downloadfiletest.data.remote.NetworkService
 import com.navin.downloadfiletest.data.remote.response.search_response.SearchResults
 import com.navin.downloadfiletest.di.FragmentScope
+import com.navin.downloadfiletest.ui.base.BaseViewModel
 import com.navin.downloadfiletest.utils.LOCAL_LIST
 import com.navin.downloadfiletest.utils.LocalCityArray
 import io.reactivex.disposables.CompositeDisposable
@@ -18,14 +20,15 @@ import javax.inject.Inject
  * Also processing of locally saved City list to be shown to user for selection of recently searched City.
  */
 @FragmentScope
-class CityQueryViewModel  @Inject constructor(
-    private val compositeDisposable: CompositeDisposable,
-    private val networkService: NetworkService,
-    private val sharedPreferences: SharedPreferences) {
+class CityQueryViewModel @Inject constructor(
+    compositeDisposable: CompositeDisposable,
+    val networkService: NetworkService,
+    networkHelper: NetworkHelper,
+    val sharedPreferences: SharedPreferences
+) : BaseViewModel(networkHelper, compositeDisposable) {
 
-    companion object {
-        val TAG : String = "CityQueryViewModel"
-    }
+
+    val TAG = this.javaClass.simpleName
 
     val getSearchResults = MutableLiveData<SearchResults>()
     val getLocalSavedData = MutableLiveData<MutableList<String>>()
@@ -70,8 +73,13 @@ class CityQueryViewModel  @Inject constructor(
         getLocalSavedData.postValue(listOfSelectableCity)
     }
 
-    fun onDestroy() {
+    override fun onCleared() {
+        super.onCleared()
         compositeDisposable.clear()
+    }
+
+    override fun onCreate() {
+
     }
 
 }

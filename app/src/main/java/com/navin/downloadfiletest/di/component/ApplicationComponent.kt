@@ -3,6 +3,7 @@ package com.navin.downloadfiletest.di.component
 import android.content.Context
 import android.content.SharedPreferences
 import com.navin.downloadfiletest.MyApplication
+import com.navin.downloadfiletest.data.remote.NetworkHelper
 import com.navin.downloadfiletest.data.remote.NetworkService
 import com.navin.downloadfiletest.di.ApplicationContext
 import com.navin.downloadfiletest.di.module.ApplicationModule
@@ -28,4 +29,5 @@ interface ApplicationComponent {
 
     fun getPicasso() : Picasso
 
+    fun getNetworkHelper() : NetworkHelper
 }
