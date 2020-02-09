@@ -47,15 +47,11 @@ abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity() {
             showMessage(it)
         })
         viewModel.messageStringId.observe(this, Observer {
-            showMessage(it)
+            showMessage(getString(it))
         })
 
     }
 
     fun showMessage(string: String) = Toast.makeText(this, string, Toast.LENGTH_SHORT).show()
-
-
-    fun showMessage(stringId: Int) = showMessage(getString(stringId))
-
 
 }

@@ -40,7 +40,7 @@ abstract class BaseFragment<VM : BaseViewModel> : Fragment() {
 
     protected open fun setupObservers() {
         viewModel.messageStringId.observe(this, Observer {
-            showMessage(it)
+            showMessage(getString(it))
         })
 
         viewModel.messageString.observe(this, Observer {
@@ -59,8 +59,6 @@ abstract class BaseFragment<VM : BaseViewModel> : Fragment() {
     fun showMessage(message: String) =
         context?.let { Toast.makeText(it, message, Toast.LENGTH_SHORT).show() }
 
-    fun showMessage(@StringRes resId: Int) = showMessage(getString(resId))
-
     fun goBack() {
         if (activity is BaseActivity<*>) (activity as BaseActivity<*>).goBack()
     }
@@ -72,4 +70,5 @@ abstract class BaseFragment<VM : BaseViewModel> : Fragment() {
     protected abstract fun getLayoutReference(): Int
 
     protected abstract fun injectDependencies(fragmentComponent: FragmentComponent)
+
 }
