@@ -1,4 +1,4 @@
-package com.big.javalibrary;
+package com.big.javalibrary.learning_algo;
 
 
 //Check if BST is valid or not
