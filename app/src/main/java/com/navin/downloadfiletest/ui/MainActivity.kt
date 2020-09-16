@@ -1,6 +1,7 @@
 package com.navin.downloadfiletest.ui
 
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.navin.downloadfiletest.MyApplication
@@ -27,6 +28,8 @@ class MainActivity : AppCompatActivity() {
             .add(R.id.fragment_container, CityQueryFragment())
             .addToBackStack(CityQueryFragment.TAG)
             .commitAllowingStateLoss()
+
+        Handler().postDelayed(Runnable {  }, 100);
     }
 
     fun launchCityDetails(city: String) {
