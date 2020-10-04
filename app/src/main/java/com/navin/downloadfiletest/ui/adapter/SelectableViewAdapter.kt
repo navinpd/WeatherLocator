@@ -8,8 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.navin.downloadfiletest.R
 
-class SelectableViewAdapter(private var cities: MutableList<String>) :
-    RecyclerView.Adapter<SelectableViewAdapter.CityViewHolder>() {
+class SelectableViewAdapter(private var cities: MutableList<String>) : RecyclerView.Adapter<SelectableViewAdapter.CityViewHolder>() {
 
     var onClickListener: View.OnClickListener? = null
 

@@ -92,7 +92,7 @@ public class TestCityDetailsViewModel {
      */
     public void _03TestSaveToLocalMultipleItem() {
         //Mocking
-        Editor editor = Mockito.mock(Editor.class);
+        Editor  = Mockito.mock(Editor.class);
         when(sharedPreferences.getString("Constants.LOCAL_LIST", "")).thenReturn("{\"CityData\":[{\"cityName\": \"Chana-Chile \", \"timeStamp\":\"1580823226010\"}]}");
 
         when(sharedPreferences.edit()).thenReturn(editor);

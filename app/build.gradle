@@ -20,12 +20,12 @@ android {
     buildTypes {
         debug {
             buildConfigField("String", "BASE_URL", "\"https://api.worldweatheronline.com/premium/v1/\"")
-            buildConfigField("String", "API_KEY", "\"5f58d538e2ca430885c122530203001\"")
+            buildConfigField("String", "API_KEY", "\"861ba3b299ce4ebba8d132928201709\"")
         }
 
         release {
             buildConfigField("String", "BASE_URL", "\"https://api.worldweatheronline.com/premium/v1/\"")
-            buildConfigField("String", "API_KEY", "\"5f58d538e2ca430885c122530203001\"")
+            buildConfigField("String", "API_KEY", "\"861ba3b299ce4ebba8d132928201709\"")
 
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

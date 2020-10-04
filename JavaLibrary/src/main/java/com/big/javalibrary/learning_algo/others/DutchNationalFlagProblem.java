@@ -1,4 +1,4 @@
-package com.big.javalibrary.learning_algo;
+package com.big.javalibrary.learning_algo.others;
 
 // Sorting a list with 3 unique numbers
 public class DutchNationalFlagProblem {

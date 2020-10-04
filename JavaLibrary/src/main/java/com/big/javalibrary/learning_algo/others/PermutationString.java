@@ -1,4 +1,4 @@
-package com.big.javalibrary.learning_algo;
+package com.big.javalibrary.learning_algo.others;
 
 import java.util.ArrayList;
 

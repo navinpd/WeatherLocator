@@ -1,10 +1,10 @@
-package com.big.javalibrary.learning_algo;
+package com.big.javalibrary.learning_algo.others;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
-class TestClass {
+class CheckItems {
 
     public static void main(String[] args) {
         List<String > item = new ArrayList<>();
